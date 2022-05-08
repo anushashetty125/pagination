@@ -7,7 +7,11 @@ import "./App.css"
 const PER_PAGE=5;
 
 function App() {
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(() => {
+    const saved=localStorage.getItem("currentPage") ?? "0";
+    const initialValue = JSON.parse(saved);
+    return initialValue || "";
+  });
   const [data, setData] = useState([]);
 
   function fetchData(){
@@ -34,6 +38,10 @@ function App() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem("currentPage", currentPage);
+  }, [currentPage]);
 
   return (
     <body>
